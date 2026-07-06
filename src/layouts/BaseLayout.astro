@@ -11,14 +11,17 @@ interface Props {
   description?: string;
   /** path only, e.g. "/kontakt" */
   path?: string;
+  /** absolute canonical URL override (e.g. /banner canonicalises to "/") */
+  canonicalOverride?: string;
 }
 const {
   title = `${site.name} — ${site.tagline}`,
   description = site.description,
   path = '/',
+  canonicalOverride,
 } = Astro.props;
 
-const canonical = new URL(path, site.url).href;
+const canonical = canonicalOverride ?? new URL(path, site.url).href;
 const ogImage = new URL('/og.jpg', site.url).href;
 
 const jsonLd = {
@@ -84,6 +87,18 @@ const jsonLd = {
         src="https://static.cloudflareinsights.com/beacon.min.js"
         data-cf-beacon={`{"token": "${site.cloudflareToken}"}`}
       />
+    )}
+
+    {site.ga4Id && (
+      <>
+        <script async src={`https://www.googletagmanager.com/gtag/js?id=${site.ga4Id}`}></script>
+        <script is:inline define:vars={{ ga4Id: site.ga4Id }}>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){ dataLayer.push(arguments); }
+          gtag('js', new Date());
+          gtag('config', ga4Id);
+        </script>
+      </>
     )}
   </head>
   <body>

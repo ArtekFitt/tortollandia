@@ -1,58 +1,8 @@
 ---
-import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import Icon from '../components/Icons.astro';
-import { site } from '../data/site';
-import logo from '../assets/logo.png';
-
-const buttons = [
-  { href: site.links.whatsapp, label: 'WhatsApp', icon: 'whatsapp', variant: 'plain', ext: true, aria: 'Napisz na WhatsApp' },
-  { href: `tel:${site.phoneE164}`, label: `Zadzwoń · ${site.phoneDisplay}`, icon: 'phone', variant: 'primary', ext: false, aria: 'Zadzwoń do Tortollandii' },
-  { href: site.links.facebook, label: 'Facebook', icon: 'facebook', variant: 'plain', ext: true, aria: 'Odwiedź nasz Facebook' },
-  { href: site.links.instagram, label: 'Instagram', icon: 'instagram', variant: 'plain', ext: true, aria: 'Odwiedź nasz Instagram' },
-  { href: site.links.googleReview, label: 'Opinie Google', icon: 'google', variant: 'plain', ext: true, aria: 'Wystaw opinię w Google' },
-  { href: '/kontakt', label: 'Kontakt · napisz do nas', icon: 'mail', variant: 'plain', ext: false, aria: 'Przejdź do formularza kontaktowego' },
-];
+import HubHome from '../components/HubHome.astro';
 ---
 
 <BaseLayout>
-  <main class="relative z-10 mx-auto flex min-h-dvh w-full max-w-[30rem] flex-col items-center px-5 py-10">
-    <header class="flex flex-col items-center text-center">
-      <Image
-        src={logo}
-        alt="Tortollandia — Weronika Janczelewska"
-        widths={[240, 320, 480]}
-        sizes="200px"
-        class="w-[11.5rem] h-auto drop-shadow-[0_6px_16px_rgba(116,64,111,0.25)]"
-        loading="eager"
-        fetchpriority="high"
-      />
-      <h1 class="mt-5 text-2xl font-semibold tracking-tight text-wrzos-700">
-        {site.tagline}
-      </h1>
-      <p class="mt-2 text-sm text-ink/70">
-        Pracownia tortów artystycznych · {site.city}
-      </p>
-    </header>
-
-    <nav class="mt-9 flex w-full flex-col gap-3" aria-label="Linki Tortollandia">
-      {buttons.map((b) => (
-        <a
-          href={b.href}
-          class={`hub-btn ${b.variant === 'primary' ? 'hub-btn--primary' : ''}`}
-          aria-label={b.aria}
-          {...(b.ext ? { target: '_blank', rel: 'noopener' } : {})}
-        >
-          <span class="hub-icon"><Icon name={b.icon} /></span>
-          <span>{b.label}</span>
-          <span class="chev hub-icon" style="width:1.1rem"><Icon name="chev" /></span>
-        </a>
-      ))}
-    </nav>
-
-    <footer class="mt-auto pt-10 text-center text-xs text-ink/55">
-      <p>© {new Date().getFullYear()} {site.name} · {site.owner}</p>
-      <p class="mt-1">{site.city}, Polska</p>
-    </footer>
-  </main>
+  <HubHome />
 </BaseLayout>

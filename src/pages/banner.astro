@@ -1,0 +1,13 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import HubHome from '../components/HubHome.astro';
+import { site } from '../data/site';
+
+// Dedicated QR landing page. Identical content to "/", but canonicalised to the
+// root so Google indexes only the homepage (no duplicate). GA4 still records the
+// page_path "/banner", giving a clean banner-scan counter separate from organic "/".
+---
+
+<BaseLayout path="/banner" canonicalOverride={site.url}>
+  <HubHome />
+</BaseLayout>

@@ -24,10 +24,13 @@ export const site = {
   // page falls back to the direct e-mail / WhatsApp / phone buttons, which work immediately.
   web3formsAccessKey: 'REPLACE_WITH_WEB3FORMS_ACCESS_KEY',
 
-  // Cloudflare Web Analytics beacon token — counts QR scans / visits (cookie-light).
-  // TODO(owner): create a free site at https://dash.cloudflare.com → Web Analytics,
-  // add tortollandia.pl, paste the token here. Beacon only loads when a token is set.
+  // Cloudflare Web Analytics beacon token — optional alternative to GA4 (cookie-light).
+  // Beacon only loads when a token is set. Left empty; owner chose GA4 (below).
   cloudflareToken: '',
+
+  // Google Analytics 4 measurement ID (owner-supplied). Tracks page_view per path,
+  // so banner scans land on /banner and are counted separately from organic "/".
+  ga4Id: 'G-8XKX7V3GF4',
 } as const;
 
 export type Site = typeof site;
