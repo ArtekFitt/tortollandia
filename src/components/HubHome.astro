@@ -2,14 +2,13 @@
 import { Image } from 'astro:assets';
 import Icon from './Icons.astro';
 import { site } from '../data/site';
-import logo from '../assets/logo.png';
+import logo from '../assets/logo.svg';
 
 const buttons = [
-  { href: site.links.whatsapp, label: 'WhatsApp', icon: 'whatsapp', variant: 'plain', ext: true, aria: 'Napisz na WhatsApp' },
-  { href: `tel:${site.phoneE164}`, label: `Zadzwoń · ${site.phoneDisplay}`, icon: 'phone', variant: 'primary', ext: false, aria: 'Zadzwoń do Tortollandii' },
   { href: site.links.facebook, label: 'Facebook', icon: 'facebook', variant: 'plain', ext: true, aria: 'Odwiedź nasz Facebook' },
   { href: site.links.instagram, label: 'Instagram', icon: 'instagram', variant: 'plain', ext: true, aria: 'Odwiedź nasz Instagram' },
   { href: site.links.googleReview, label: 'Opinie Google', icon: 'google', variant: 'plain', ext: true, aria: 'Wystaw opinię w Google' },
+  { href: `tel:${site.phoneE164}`, label: `Zadzwoń · ${site.phoneDisplay}`, icon: 'phone', variant: 'primary', ext: false, aria: 'Zadzwoń do Tortollandii' },
   { href: '/kontakt', label: 'Kontakt · napisz do nas', icon: 'mail', variant: 'plain', ext: false, aria: 'Przejdź do formularza kontaktowego' },
 ];
 ---
