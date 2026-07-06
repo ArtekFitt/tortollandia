@@ -2,7 +2,7 @@
 import { Image } from 'astro:assets';
 import Icon from './Icons.astro';
 import { site } from '../data/site';
-import logo from '../assets/logo_tortollandia_XXL.png';
+import logo from '../assets/logo.svg';
 
 const buttons = [
   { href: site.links.facebook, label: 'Facebook', icon: 'facebook', variant: 'plain', ext: true, aria: 'Odwiedź nasz Facebook' },
@@ -11,6 +11,13 @@ const buttons = [
   { href: `tel:${site.phoneE164}`, label: `Zadzwoń · ${site.phoneDisplay}`, icon: 'phone', variant: 'primary', ext: false, aria: 'Zadzwoń do Tortollandii' },
   { href: '/kontakt', label: 'Kontakt · napisz do nas', icon: 'mail', variant: 'plain', ext: false, aria: 'Przejdź do formularza kontaktowego' },
 ];
+
+const galleryImages = await Promise.all([
+  import('../assets/gallery/1.jpg'),
+  import('../assets/gallery/2.jpg'),
+  import('../assets/gallery/3.jpg'),
+  import('../assets/gallery/4.jpg'),
+]);
 ---
 
 <main class="relative z-10 mx-auto flex min-h-dvh w-full max-w-[30rem] flex-col items-center px-5 py-10">
@@ -46,6 +53,21 @@ const buttons = [
       </a>
     ))}
   </nav>
+
+  <section class="mt-10 w-full" aria-label="Galeria tortów">
+    <div class="grid grid-cols-2 gap-3">
+      {galleryImages.map((img, index) => (
+        <Image
+          src={img.default}
+          alt={`Tort artystyczny ${index + 1}`}
+          class="aspect-square w-full rounded-lg object-cover"
+          widths={[200, 400]}
+          sizes="(max-width: 640px) 50vw, 200px"
+          loading="lazy"
+        />
+      ))}
+    </div>
+  </section>
 
   <footer class="mt-auto pt-10 text-center text-xs text-ink/55">
     <p>© {new Date().getFullYear()} {site.name} · {site.owner}</p>
