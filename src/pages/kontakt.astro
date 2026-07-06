@@ -1,0 +1,113 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Icon from '../components/Icons.astro';
+import { site } from '../data/site';
+
+const formEnabled =
+  site.web3formsAccessKey.length > 12 &&
+  site.web3formsAccessKey !== 'REPLACE_WITH_WEB3FORMS_ACCESS_KEY';
+---
+
+<BaseLayout
+  title={`Kontakt — ${site.name}`}
+  description={`Skontaktuj się z Tortollandią w Ełku. Napisz do nas, zadzwoń ${site.phoneDisplay} lub napisz na WhatsApp.`}
+  path="/kontakt"
+>
+  <main class="relative z-10 mx-auto flex min-h-dvh w-full max-w-[30rem] flex-col px-5 py-10">
+    <a href="/" class="mb-6 inline-flex items-center gap-1 text-sm text-wrzos-700 hover:underline">
+      ← Wróć
+    </a>
+
+    <h1 class="text-3xl font-semibold text-wrzos-700">Napisz do nas</h1>
+    <p class="mt-2 text-sm text-ink/75">
+      Masz pomysł na tort? Podaj nam okazję, datę i liczbę osób — odezwiemy się z wyceną.
+    </p>
+
+    <!-- Always-working direct contact -->
+    <div class="mt-6 flex flex-col gap-3">
+      <a href={site.links.whatsapp} target="_blank" rel="noopener" class="hub-btn hub-btn--primary" aria-label="Napisz na WhatsApp">
+        <span class="hub-icon"><Icon name="whatsapp" /></span>
+        <span>Napisz na WhatsApp</span>
+      </a>
+      <a href={`mailto:${site.email}`} class="hub-btn" aria-label="Wyślij e-mail">
+        <span class="hub-icon"><Icon name="mail" /></span>
+        <span>{site.email}</span>
+      </a>
+      <a href={`tel:${site.phoneE164}`} class="hub-btn" aria-label="Zadzwoń">
+        <span class="hub-icon"><Icon name="phone" /></span>
+        <span>Zadzwoń · {site.phoneDisplay}</span>
+      </a>
+    </div>
+
+    {formEnabled && (
+      <>
+        <div class="my-7 flex items-center gap-3 text-xs uppercase tracking-widest text-ink/45">
+          <span class="h-px flex-1 bg-ink/15"></span>lub wypełnij formularz<span class="h-px flex-1 bg-ink/15"></span>
+        </div>
+
+        <form
+          id="contact-form"
+          class="flex flex-col gap-4 rounded-2xl border border-wrzos/15 bg-white/80 p-5 backdrop-blur"
+          action="https://api.web3forms.com/submit"
+          method="POST"
+        >
+          <input type="hidden" name="access_key" value={site.web3formsAccessKey} />
+          <input type="hidden" name="subject" value="Nowa wiadomość ze strony tortollandia.pl" />
+          <input type="hidden" name="from_name" value="Strona Tortollandia" />
+          <input type="checkbox" name="botcheck" class="hidden" style="display:none" tabindex="-1" autocomplete="off" aria-hidden="true" />
+
+          <div class="flex flex-col gap-1.5">
+            <label for="name" class="text-sm font-medium">Imię</label>
+            <input id="name" name="name" type="text" required autocomplete="name"
+              class="rounded-lg border border-wrzos/20 bg-white px-3 py-2.5 text-ink outline-none focus:border-wrzos focus:ring-2 focus:ring-wrzos/30" />
+          </div>
+          <div class="flex flex-col gap-1.5">
+            <label for="email" class="text-sm font-medium">E-mail lub telefon</label>
+            <input id="email" name="email" type="text" required autocomplete="email"
+              class="rounded-lg border border-wrzos/20 bg-white px-3 py-2.5 text-ink outline-none focus:border-wrzos focus:ring-2 focus:ring-wrzos/30" />
+          </div>
+          <div class="flex flex-col gap-1.5">
+            <label for="message" class="text-sm font-medium">Wiadomość</label>
+            <textarea id="message" name="message" rows="4" required
+              class="rounded-lg border border-wrzos/20 bg-white px-3 py-2.5 text-ink outline-none focus:border-wrzos focus:ring-2 focus:ring-wrzos/30"></textarea>
+          </div>
+          <button type="submit" class="hub-btn hub-btn--primary justify-center font-semibold">Wyślij wiadomość</button>
+          <p id="form-status" role="status" aria-live="polite" class="text-center text-sm"></p>
+        </form>
+      </>
+    )}
+
+    <footer class="mt-auto pt-10 text-center text-xs text-ink/55">
+      <p>© {new Date().getFullYear()} {site.name} · {site.owner} · {site.city}</p>
+    </footer>
+  </main>
+
+  {formEnabled && (
+    <script>
+      function wireForm() {
+        const form = document.getElementById('contact-form') as HTMLFormElement | null;
+        const status = document.getElementById('form-status');
+        if (!form || form.dataset.wired) return;
+        form.dataset.wired = '1';
+        form.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          if (status) { status.textContent = 'Wysyłanie…'; status.style.color = '#74406f'; }
+          try {
+            const res = await fetch(form.action, { method: 'POST', body: new FormData(form), headers: { Accept: 'application/json' } });
+            const data = await res.json();
+            if (res.ok && data.success) {
+              form.reset();
+              if (status) { status.textContent = 'Dziękujemy! Wiadomość została wysłana. 💜'; status.style.color = '#2e7d32'; }
+            } else {
+              throw new Error(data.message || 'error');
+            }
+          } catch {
+            if (status) { status.textContent = 'Nie udało się wysłać. Napisz na WhatsApp lub e-mail powyżej.'; status.style.color = '#c62828'; }
+          }
+        });
+      }
+      document.addEventListener('astro:page-load', wireForm);
+      wireForm();
+    </script>
+  )}
+</BaseLayout>

@@ -1,0 +1,94 @@
+@import "tailwindcss";
+
+/* ---- Brand tokens (board-accepted purples) ---- */
+@theme {
+  --color-wrzos: #9F5F9C;   /* primary purple */
+  --color-wrzos-600: #8a4e88;
+  --color-wrzos-700: #74406f;
+  --color-lila: #CEA4D4;    /* light lila */
+  --color-lila-50: #F7EEF6;
+  --color-cream: #FBF6FA;
+  --color-ink: #3a2a3a;     /* soft near-black for body text */
+
+  --font-display: var(--font-display), Georgia, serif;
+  --font-body: var(--font-body), system-ui, sans-serif;
+}
+
+:root {
+  color-scheme: light;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-body);
+  color: var(--color-ink);
+  background:
+    radial-gradient(1200px 600px at 50% -8%, #F9EEF7 0%, rgba(249,238,247,0) 60%),
+    linear-gradient(165deg, #F6E8F3 0%, #E9CFE8 48%, #DDB9DC 100%);
+  background-attachment: fixed;
+  min-height: 100dvh;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Cake watermark behind everything */
+.cake-watermark {
+  position: fixed;
+  left: 50%;
+  bottom: -4vh;
+  transform: translateX(-50%);
+  width: min(560px, 92vw);
+  z-index: 0;
+  opacity: 0.16;
+  pointer-events: none;
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 26%, #000 100%);
+  mask-image: linear-gradient(to bottom, transparent 0%, #000 26%, #000 100%);
+  filter: saturate(1.05);
+}
+
+h1, h2, h3, .font-display { font-family: var(--font-display); }
+
+/* Link-hub pill button */
+.hub-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  width: 100%;
+  padding: 0.95rem 1.15rem;
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(159, 95, 156, 0.14);
+  box-shadow: 0 6px 18px -10px rgba(116, 64, 111, 0.45);
+  color: var(--color-ink);
+  font-weight: 500;
+  font-size: 1.02rem;
+  text-decoration: none;
+  transition: transform 0.16s ease, box-shadow 0.16s ease, background 0.16s ease;
+}
+.hub-btn:hover, .hub-btn:focus-visible {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px -12px rgba(116, 64, 111, 0.55);
+  background: #fff;
+}
+.hub-btn:focus-visible { outline: 3px solid var(--color-wrzos); outline-offset: 2px; }
+
+.hub-btn--primary {
+  background: linear-gradient(135deg, #A865A4 0%, #8A4E88 100%);
+  color: #fff;
+  border-color: transparent;
+}
+.hub-btn--primary:hover, .hub-btn--primary:focus-visible { background: linear-gradient(135deg, #B06FAC 0%, #74406f 100%); }
+
+.hub-icon {
+  flex: 0 0 auto;
+  width: 1.55rem;
+  height: 1.55rem;
+  display: grid;
+  place-items: center;
+}
+.hub-btn .chev { margin-left: auto; opacity: 0.5; }

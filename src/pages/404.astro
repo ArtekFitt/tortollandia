@@ -1,0 +1,12 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { site } from '../data/site';
+---
+<BaseLayout title={`Nie znaleziono strony — ${site.name}`} description="Strona nie została znaleziona." path="/404">
+  <main class="relative z-10 mx-auto flex min-h-dvh w-full max-w-[30rem] flex-col items-center justify-center px-5 py-10 text-center">
+    <p class="font-display text-6xl font-semibold text-wrzos-700">404</p>
+    <h1 class="mt-3 text-xl font-semibold">Ups! Nie ma tu tortu.</h1>
+    <p class="mt-2 text-sm text-ink/70">Ta strona nie istnieje.</p>
+    <a href="/" class="hub-btn hub-btn--primary mt-7 justify-center max-w-xs">Wróć na stronę główną</a>
+  </main>
+</BaseLayout>

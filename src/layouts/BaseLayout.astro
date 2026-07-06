@@ -1,0 +1,93 @@
+---
+import '../styles/global.css';
+import { Font } from 'astro:assets';
+import { Image } from 'astro:assets';
+import { ClientRouter } from 'astro:transitions';
+import { site } from '../data/site';
+import cake from '../assets/cake.png';
+
+interface Props {
+  title?: string;
+  description?: string;
+  /** path only, e.g. "/kontakt" */
+  path?: string;
+}
+const {
+  title = `${site.name} — ${site.tagline}`,
+  description = site.description,
+  path = '/',
+} = Astro.props;
+
+const canonical = new URL(path, site.url).href;
+const ogImage = new URL('/og.jpg', site.url).href;
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Bakery',
+  name: site.name,
+  description: site.description,
+  image: ogImage,
+  url: site.url,
+  telephone: site.phoneE164,
+  email: site.email,
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: site.city,
+    addressCountry: 'PL',
+  },
+  areaServed: site.city,
+  founder: { '@type': 'Person', name: site.owner },
+  sameAs: [site.links.facebook, site.links.instagram],
+};
+---
+
+<!doctype html>
+<html lang="pl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light" />
+    <meta name="theme-color" content="#CEA4D4" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content="pl_PL" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <Font cssVariable="--font-display" preload />
+    <Font cssVariable="--font-body" preload />
+    <ClientRouter />
+
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
+    {site.cloudflareToken && (
+      <script
+        defer
+        src="https://static.cloudflareinsights.com/beacon.min.js"
+        data-cf-beacon={`{"token": "${site.cloudflareToken}"}`}
+      />
+    )}
+  </head>
+  <body>
+    <Image src={cake} alt="" aria-hidden="true" class="cake-watermark" widths={[400, 560, 1100]} sizes="560px" loading="eager" />
+    <slot />
+  </body>
+</html>

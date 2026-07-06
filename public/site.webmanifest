@@ -1,0 +1,13 @@
+{
+  "name": "Tortollandia",
+  "short_name": "Tortollandia",
+  "description": "Torty artystyczne na każdą okazję — Ełk",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#F6E8F3",
+  "theme_color": "#CEA4D4",
+  "icons": [
+    { "src": "/apple-touch-icon.png", "sizes": "180x180", "type": "image/png" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
