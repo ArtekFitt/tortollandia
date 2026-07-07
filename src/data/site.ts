@@ -1,7 +1,7 @@
 // Single source of truth for Tortollandia link-hub.
 export const site = {
   name: 'Tortollandia',
-  owner: 'Weronika Janczelewska',
+  owner: 'Weronika Jenczelewska',
   city: 'Ełk',
   url: 'https://tortollandia.pl',
   tagline: 'Torty artystyczne na każdą okazję',

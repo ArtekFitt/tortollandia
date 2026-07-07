@@ -10,7 +10,7 @@ const formEnabled =
 
 <BaseLayout
   title={`Kontakt — ${site.name}`}
-  description={`Skontaktuj się z Tortollandią w Ełku. Napisz do nas, zadzwoń ${site.phoneDisplay} lub napisz na WhatsApp.`}
+  description={`Skontaktuj się z Tortollandią w Ełku. Napisz do nas lub zadzwoń ${site.phoneDisplay}.`}
   path="/kontakt"
 >
   <main class="relative z-10 mx-auto flex min-h-dvh w-full max-w-[30rem] flex-col px-5 py-10">
@@ -25,11 +25,7 @@ const formEnabled =
 
     <!-- Always-working direct contact -->
     <div class="mt-6 flex flex-col gap-3">
-      <a href={site.links.whatsapp} target="_blank" rel="noopener" class="hub-btn hub-btn--primary" aria-label="Napisz na WhatsApp">
-        <span class="hub-icon"><Icon name="whatsapp" /></span>
-        <span>Napisz na WhatsApp</span>
-      </a>
-      <a href={`mailto:${site.email}`} class="hub-btn" aria-label="Wyślij e-mail">
+      <a href={`mailto:${site.email}`} class="hub-btn hub-btn--primary" aria-label="Wyślij e-mail">
         <span class="hub-icon"><Icon name="mail" /></span>
         <span>{site.email}</span>
       </a>
@@ -102,7 +98,7 @@ const formEnabled =
               throw new Error(data.message || 'error');
             }
           } catch {
-            if (status) { status.textContent = 'Nie udało się wysłać. Napisz na WhatsApp lub e-mail powyżej.'; status.style.color = '#c62828'; }
+            if (status) { status.textContent = 'Nie udało się wysłać. Napisz na e-mail lub zadzwoń powyżej.'; status.style.color = '#c62828'; }
           }
         });
       }
