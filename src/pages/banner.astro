@@ -4,10 +4,31 @@ import HubHome from '../components/HubHome.astro';
 import { site } from '../data/site';
 
 // Dedicated QR landing page. Identical content to "/", but canonicalised to the
-// root so Google indexes only the homepage (no duplicate). GA4 still records the
-// page_path "/banner", giving a clean banner-scan counter separate from organic "/".
+// root so Google indexes only the homepage (no duplicate).
+//
+// Counting scans: GitHub Pages serves this route at "/banner/" (with a trailing
+// slash — /banner 301-redirects to /banner/), so the auto page_view records the
+// path "/banner/", NOT "/banner". To make the scan count reliable regardless of
+// path-string matching, we also fire an explicit GA4 event "banner_qr_scan" on
+// load — filter by that event name in GA4 for a clean, unambiguous scan counter.
 ---
 
 <BaseLayout path="/banner" canonicalOverride={site.url}>
   <HubHome />
+
+  {site.ga4Id && (
+    <script is:inline>
+      // Fire a distinct event so banner scans are countable by event name in GA4,
+      // independent of the "/banner/" vs "/banner" page-path trailing slash.
+      (function () {
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('event', 'banner_qr_scan', {
+          event_category: 'qr',
+          event_label: 'baner_plac_zabaw',
+          page_location: window.location.href,
+        });
+      })();
+    </script>
+  )}
 </BaseLayout>
