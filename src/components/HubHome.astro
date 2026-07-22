@@ -4,13 +4,16 @@ import Icon from './Icons.astro';
 import { site } from '../data/site';
 import logo from '../assets/logo_tortollandia_500x500.png';
 
+// `ga` = GA4 event name fired on click (total per button, visible directly in the
+// Events report). The click handler below also attaches a `zrodlo` parameter
+// (strona_glowna | baner) so scans from "/" and "/banner" are countable separately.
 const buttons = [
-  { href: site.links.facebook, label: 'Facebook', icon: 'facebook', variant: 'plain', ext: true, aria: 'Odwiedź nasz Facebook' },
-  { href: site.links.instagram, label: 'Instagram', icon: 'instagram', variant: 'plain', ext: true, aria: 'Odwiedź nasz Instagram' },
-  { href: site.links.googleReview, label: 'Zostaw opinię', icon: 'google', variant: 'plain', ext: true, aria: 'Wystaw opinię w Google' },
-  { href: 'https://maps.app.goo.gl/84samJv4SSBEMwDa7?g_st=ac', label: 'Jak dojechać', icon: 'map', variant: 'plain', ext: true, aria: 'Wskazówki dojazdu w Mapach Google' },
-  { href: `tel:${site.phoneE164}`, label: `Zadzwoń · ${site.phoneDisplay}`, icon: 'phone', variant: 'primary', ext: false, aria: 'Zadzwoń do Tortollandii' },
-  { href: '/kontakt', label: 'Kontakt · napisz do nas', icon: 'mail', variant: 'plain', ext: false, aria: 'Przejdź do formularza kontaktowego' },
+  { href: site.links.facebook, label: 'Facebook', icon: 'facebook', variant: 'plain', ext: true, aria: 'Odwiedź nasz Facebook', ga: 'click_facebook' },
+  { href: site.links.instagram, label: 'Instagram', icon: 'instagram', variant: 'plain', ext: true, aria: 'Odwiedź nasz Instagram', ga: 'click_instagram' },
+  { href: site.links.googleReview, label: 'Zostaw opinię', icon: 'google', variant: 'plain', ext: true, aria: 'Wystaw opinię w Google', ga: 'click_opinie' },
+  { href: 'https://maps.app.goo.gl/84samJv4SSBEMwDa7?g_st=ac', label: 'Jak dojechać', icon: 'map', variant: 'plain', ext: true, aria: 'Wskazówki dojazdu w Mapach Google', ga: 'click_dojazd' },
+  { href: `tel:${site.phoneE164}`, label: `Zadzwoń · ${site.phoneDisplay}`, icon: 'phone', variant: 'primary', ext: false, aria: 'Zadzwoń do Tortollandii', ga: 'click_telefon' },
+  { href: '/kontakt', label: 'Kontakt · napisz do nas', icon: 'mail', variant: 'plain', ext: false, aria: 'Przejdź do formularza kontaktowego', ga: 'click_kontakt' },
 ];
 
 const galleryImages = await Promise.all([
@@ -46,6 +49,8 @@ const galleryImages = await Promise.all([
         href={b.href}
         class={`hub-btn ${b.variant === 'primary' ? 'hub-btn--primary' : ''}`}
         aria-label={b.aria}
+        data-ga-event={b.ga}
+        data-ga-label={b.label}
         {...(b.ext ? { target: '_blank', rel: 'noopener' } : {})}
       >
         <span class="hub-icon"><Icon name={b.icon} /></span>
@@ -75,3 +80,30 @@ const galleryImages = await Promise.all([
     <p class="mt-1">{site.city}, Polska</p>
   </footer>
 </main>
+
+{site.ga4Id && (
+  <script is:inline>
+    // GA4 click tracking for the hub buttons. Fires a named event per button
+    // (visible directly in Zdarzenia) plus a `zrodlo` parameter so clicks from the
+    // homepage ("/") and the banner landing ("/banner") are countable separately.
+    // Bound once on `document` (which survives Astro view transitions) via a guard
+    // flag; capture phase so the event is sent before navigation begins.
+    (function () {
+      if (window.__ttCtaBound) return;
+      window.__ttCtaBound = true;
+      function gtag() { (window.dataLayer = window.dataLayer || []).push(arguments); }
+      document.addEventListener('click', function (e) {
+        var a = e.target && e.target.closest && e.target.closest('a[data-ga-event]');
+        if (!a) return;
+        var zrodlo = /^\/banner(\/|$)/.test(window.location.pathname) ? 'baner' : 'strona_glowna';
+        gtag('event', a.getAttribute('data-ga-event'), {
+          zrodlo: zrodlo,
+          link_label: a.getAttribute('data-ga-label') || (a.textContent || '').trim(),
+          link_url: a.getAttribute('href'),
+          page_location: window.location.href,
+          transport_type: 'beacon',
+        });
+      }, true);
+    })();
+  </script>
+)}
