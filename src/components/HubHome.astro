@@ -6,7 +6,8 @@ import logo from '../assets/logo_tortollandia_500x500.png';
 
 // `ga` = GA4 event name fired on click (total per button, visible directly in the
 // Events report). The click handler below also attaches a `zrodlo` parameter
-// (strona_glowna | baner) so scans from "/" and "/banner" are countable separately.
+// (strona_glowna | baner | ulotki) so clicks from "/", "/banner" and "/ulotki"
+// are countable separately.
 const buttons = [
   { href: site.links.facebook, label: 'Facebook', icon: 'facebook', variant: 'plain', ext: true, aria: 'Odwiedź nasz Facebook', ga: 'click_facebook' },
   { href: site.links.instagram, label: 'Instagram', icon: 'instagram', variant: 'plain', ext: true, aria: 'Odwiedź nasz Instagram', ga: 'click_instagram' },
@@ -85,7 +86,8 @@ const galleryImages = await Promise.all([
   <script is:inline>
     // GA4 click tracking for the hub buttons. Fires a named event per button
     // (visible directly in Zdarzenia) plus a `zrodlo` parameter so clicks from the
-    // homepage ("/") and the banner landing ("/banner") are countable separately.
+    // homepage ("/"), the banner landing ("/banner") and the flyer landing
+    // ("/ulotki") are countable separately.
     // Bound once on `document` (which survives Astro view transitions) via a guard
     // flag; capture phase so the event is sent before navigation begins.
     (function () {
@@ -95,7 +97,10 @@ const galleryImages = await Promise.all([
       document.addEventListener('click', function (e) {
         var a = e.target && e.target.closest && e.target.closest('a[data-ga-event]');
         if (!a) return;
-        var zrodlo = /^\/banner(\/|$)/.test(window.location.pathname) ? 'baner' : 'strona_glowna';
+        var path = window.location.pathname;
+        var zrodlo = /^\/banner(\/|$)/.test(path) ? 'baner'
+          : /^\/ulotki(\/|$)/.test(path) ? 'ulotki'
+          : 'strona_glowna';
         gtag('event', a.getAttribute('data-ga-event'), {
           zrodlo: zrodlo,
           link_label: a.getAttribute('data-ga-label') || (a.textContent || '').trim(),
