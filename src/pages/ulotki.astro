@@ -1,0 +1,36 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import HubHome from '../components/HubHome.astro';
+import { site } from '../data/site';
+
+// Dedicated QR landing page for the printed flyers ("ulotki"). Identical content
+// to "/", but canonicalised to the root so Google indexes only the homepage
+// (no duplicate).
+//
+// Counting scans: GitHub Pages serves this route at "/ulotki/" (with a trailing
+// slash — /ulotki 301-redirects to /ulotki/), so the auto page_view records the
+// path "/ulotki/", NOT "/ulotki". To make the scan count reliable regardless of
+// path-string matching, we also fire an explicit GA4 event "ulotki_qr_scan" on
+// load — filter by that event name in GA4 for a clean, unambiguous scan counter.
+// (Same pattern as /banner + banner_qr_scan, see LOCA-212 / LOCA-258.)
+---
+
+<BaseLayout path="/ulotki" canonicalOverride={site.url}>
+  <HubHome />
+
+  {site.ga4Id && (
+    <script is:inline>
+      // Fire a distinct event so flyer scans are countable by event name in GA4,
+      // independent of the "/ulotki/" vs "/ulotki" page-path trailing slash.
+      (function () {
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('event', 'ulotki_qr_scan', {
+          event_category: 'qr',
+          event_label: 'ulotki_miasto',
+          page_location: window.location.href,
+        });
+      })();
+    </script>
+  )}
+</BaseLayout>
