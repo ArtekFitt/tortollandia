@@ -22,14 +22,21 @@ const {
 } = Astro.props;
 
 const canonical = canonicalOverride ?? new URL(path, site.url).href;
-const ogImage = new URL('/og.jpg', site.url).href;
+// Owner photo (Weronika, właścicielka) — used for the Google result thumbnail and
+// social share preview. og.jpg (brand banner) is kept in the repo for reference.
+const ogImage = new URL('/owner.jpg', site.url).href;
+// Structured-data business image in three aspect ratios (1:1, 4:3, 16:9) — Google's
+// recommendation so it can pick whichever ratio fits the search result thumbnail.
+const businessImages = ['/owner-1x1.jpg', '/owner-4x3.jpg', '/owner-16x9.jpg'].map(
+  (p) => new URL(p, site.url).href,
+);
 
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Bakery',
   name: site.name,
   description: site.description,
-  image: ogImage,
+  image: businessImages,
   url: site.url,
   telephone: site.phoneE164,
   email: site.email,

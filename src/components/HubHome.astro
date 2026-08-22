@@ -3,6 +3,7 @@ import { Image } from 'astro:assets';
 import Icon from './Icons.astro';
 import { site } from '../data/site';
 import logo from '../assets/logo_tortollandia_500x500.png';
+import owner from '../assets/owner.jpg';
 
 // `ga` = GA4 event name fired on click (total per button, visible directly in the
 // Events report). The click handler below also attaches a `zrodlo` parameter
@@ -43,6 +44,21 @@ const galleryImages = await Promise.all([
       Pracownia tortów artystycznych · {site.city}
     </p>
   </header>
+
+  <figure class="mt-7 w-full">
+    <Image
+      src={owner}
+      alt={`${site.owner} — właścicielka pracowni Tortollandia w ${site.city}`}
+      widths={[440, 640, 880]}
+      sizes="(max-width: 480px) 90vw, 440px"
+      class="aspect-[4/3] w-full rounded-2xl object-cover object-top shadow-[0_10px_30px_rgba(116,64,111,0.22)]"
+      loading="eager"
+      fetchpriority="high"
+    />
+    <figcaption class="mt-2 text-center text-xs text-ink/60">
+      {site.owner} · właścicielka
+    </figcaption>
+  </figure>
 
   <nav class="mt-9 flex w-full flex-col gap-3" aria-label="Linki Tortollandia">
     {buttons.map((b) => (
