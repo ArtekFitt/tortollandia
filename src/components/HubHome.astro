@@ -45,21 +45,6 @@ const galleryImages = await Promise.all([
     </p>
   </header>
 
-  <figure class="mt-7 w-full">
-    <Image
-      src={owner}
-      alt={`${site.owner} — właścicielka pracowni Tortollandia w ${site.city}`}
-      widths={[440, 640, 880]}
-      sizes="(max-width: 480px) 90vw, 440px"
-      class="aspect-[4/3] w-full rounded-2xl object-cover object-top shadow-[0_10px_30px_rgba(116,64,111,0.22)]"
-      loading="eager"
-      fetchpriority="high"
-    />
-    <figcaption class="mt-2 text-center text-xs text-ink/60">
-      {site.owner} · właścicielka
-    </figcaption>
-  </figure>
-
   <nav class="mt-9 flex w-full flex-col gap-3" aria-label="Linki Tortollandia">
     {buttons.map((b) => (
       <a
@@ -76,6 +61,20 @@ const galleryImages = await Promise.all([
       </a>
     ))}
   </nav>
+
+  <figure class="mt-8 w-full">
+    <Image
+      src={owner}
+      alt={`${site.owner} — właścicielka pracowni Tortollandia w ${site.city}`}
+      widths={[440, 640, 880]}
+      sizes="(max-width: 480px) 90vw, 440px"
+      class="aspect-[4/3] w-full rounded-2xl object-cover object-top shadow-[0_10px_30px_rgba(116,64,111,0.22)]"
+      loading="lazy"
+    />
+    <figcaption class="mt-2 text-center text-xs text-ink/60">
+      {site.owner} · właścicielka
+    </figcaption>
+  </figure>
 
   <section class="mt-10 w-full" aria-label="Galeria tortów">
     <div class="grid grid-cols-2 gap-3">
