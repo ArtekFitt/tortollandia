@@ -31,23 +31,65 @@ const businessImages = ['/owner-1x1.jpg', '/owner-4x3.jpg', '/owner-16x9.jpg'].m
   (p) => new URL(p, site.url).href,
 );
 
+// Full LocalBusiness/Bakery structured data. Business facts are centralised in
+// src/data/site.ts. openingHoursSpecification is only emitted when the owner has
+// confirmed hours (site.openingHours non-empty) — an artisan by-order studio has
+// no fixed retail hours, so we omit rather than guess.
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Bakery',
+  '@id': `${site.url}/#bakery`,
   name: site.name,
+  alternateName: `${site.name} ${site.city}`,
   description: site.description,
   image: businessImages,
+  logo: new URL('/icon-512.png', site.url).href,
   url: site.url,
   telephone: site.phoneE164,
   email: site.email,
+  priceRange: '$$',
+  currenciesAccepted: 'PLN',
+  paymentAccepted: 'Gotówka, Przelew, BLIK',
   address: {
     '@type': 'PostalAddress',
+    streetAddress: site.address.street,
     addressLocality: site.city,
+    postalCode: site.address.postalCode,
+    addressRegion: site.address.region,
     addressCountry: 'PL',
   },
-  areaServed: site.city,
+  geo: {
+    '@type': 'GeoCoordinates',
+    latitude: site.geo.lat,
+    longitude: site.geo.lng,
+  },
+  hasMap: site.links.googleMaps,
+  areaServed: [
+    { '@type': 'City', name: site.city },
+    { '@type': 'AdministrativeArea', name: 'powiat ełcki' },
+  ],
   founder: { '@type': 'Person', name: site.owner },
-  sameAs: [site.links.facebook, site.links.instagram],
+  ...(site.openingHours.length
+    ? {
+        openingHoursSpecification: site.openingHours.map((h) => ({
+          '@type': 'OpeningHoursSpecification',
+          dayOfWeek: h.days,
+          opens: h.opens,
+          closes: h.closes,
+        })),
+      }
+    : {}),
+  makesOffer: [
+    'Torty urodzinowe',
+    'Torty na chrzciny',
+    'Torty komunijne',
+    'Torty weselne',
+    'Torty okolicznościowe',
+  ].map((name) => ({
+    '@type': 'Offer',
+    itemOffered: { '@type': 'Product', name, category: 'Torty artystyczne' },
+  })),
+  sameAs: [site.links.facebook, site.links.instagram, site.links.googleMaps],
 };
 ---
 
