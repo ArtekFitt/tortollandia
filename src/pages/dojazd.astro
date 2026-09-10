@@ -29,8 +29,9 @@ const fullAddress = `${site.address.street}, ${site.address.postalCode} ${site.c
 
     <h1 class="text-3xl font-semibold text-wrzos-700">Jak do nas trafić</h1>
     <p class="mt-2 text-sm text-ink/75">
-      Nagraliśmy krótki film, który krok po kroku pokazuje drogę do pracowni.
-      Obejrzyj go poniżej albo od razu włącz nawigację w Mapach Google.
+      {videoKind !== 'none'
+        ? 'Nagraliśmy krótki film, który krok po kroku pokazuje drogę do pracowni. Obejrzyj go poniżej albo od razu włącz nawigację w Mapach Google.'
+        : 'Poniżej znajdziesz adres pracowni i nawigację. Kliknij „Otwórz w Mapach Google”, aby od razu wyznaczyć trasę.'}
     </p>
 
     {videoKind !== 'none' && (

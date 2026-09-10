@@ -40,11 +40,15 @@ export const site = {
   // no third-party chrome) → `youtubeId` (unlisted) → `driveId` (Google Drive
   // /preview iframe, requires the file be shared "anyone with the link"). Leave all
   // empty to hide the player and show the map/contact only.
+  // Kept OFF until the owner picks a hosting method (the source file is currently
+  // private in Drive). Pending Drive file id: 1GneGP1_KAcNDu5D6W8v_1VTPyOd7qki8 —
+  // set `driveId` to it once the file is shared "anyone with the link", or set
+  // `youtubeId` if uploaded as an unlisted YouTube video, or `file` if self-hosted.
   dojazdVideo: {
     file: '',
     poster: '',
     youtubeId: '',
-    driveId: '1GneGP1_KAcNDu5D6W8v_1VTPyOd7qki8',
+    driveId: '',
   },
 
   // Contact form — Web3Forms (static-friendly, free). Delivers to the email above.
