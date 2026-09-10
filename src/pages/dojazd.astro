@@ -1,0 +1,156 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Icon from '../components/Icons.astro';
+import { site } from '../data/site';
+
+// "Jak dojechać" — dedicated directions page (replaces the hub button that jumped
+// straight to Google Maps). Shows the owner's short film explaining how to reach the
+// studio, plus the address and a button that opens Google Maps navigation.
+//
+// Video source is resolved from site.dojazdVideo (see src/data/site.ts):
+//   file  → self-hosted <video> (preferred)
+//   youtubeId → unlisted YouTube embed
+//   driveId  → Google Drive /preview iframe (needs "anyone with the link" sharing)
+// If none is set, the player is hidden and only the address/map is shown.
+const v = site.dojazdVideo;
+const videoKind = v.file ? 'file' : v.youtubeId ? 'youtube' : v.driveId ? 'drive' : 'none';
+const fullAddress = `${site.address.street}, ${site.address.postalCode} ${site.city}`;
+---
+
+<BaseLayout
+  title={`Jak do nas trafić — ${site.name}`}
+  description={`Zobacz film, jak dojechać do pracowni Tortollandia w ${site.city} (${site.address.street}). Otwórz nawigację w Mapach Google jednym kliknięciem.`}
+  path="/dojazd"
+>
+  <main class="relative z-10 mx-auto flex min-h-dvh w-full max-w-[30rem] flex-col px-5 py-10">
+    <a href="/" class="mb-6 inline-flex items-center gap-1 text-sm text-wrzos-700 hover:underline">
+      ← Wróć
+    </a>
+
+    <h1 class="text-3xl font-semibold text-wrzos-700">Jak do nas trafić</h1>
+    <p class="mt-2 text-sm text-ink/75">
+      Nagraliśmy krótki film, który krok po kroku pokazuje drogę do pracowni.
+      Obejrzyj go poniżej albo od razu włącz nawigację w Mapach Google.
+    </p>
+
+    {videoKind !== 'none' && (
+      <figure class="mt-6 w-full">
+        <div
+          id="dojazd-video"
+          class="mx-auto w-full max-w-sm overflow-hidden rounded-2xl bg-black shadow-[0_10px_30px_rgba(116,64,111,0.22)]"
+          style="aspect-ratio:9/16;max-height:75vh"
+        >
+          {videoKind === 'file' && (
+            <video
+              class="h-full w-full object-contain"
+              controls
+              preload="none"
+              playsinline
+              poster={v.poster || undefined}
+            >
+              <source src={v.file} type="video/mp4" />
+              Twoja przeglądarka nie obsługuje odtwarzania wideo.
+            </video>
+          )}
+          {videoKind === 'youtube' && (
+            <iframe
+              class="h-full w-full"
+              src={`https://www.youtube-nocookie.com/embed/${v.youtubeId}`}
+              title="Jak dojechać do Tortollandii"
+              loading="lazy"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowfullscreen
+            ></iframe>
+          )}
+          {videoKind === 'drive' && (
+            <iframe
+              class="h-full w-full"
+              src={`https://drive.google.com/file/d/${v.driveId}/preview`}
+              title="Jak dojechać do Tortollandii"
+              loading="lazy"
+              allow="autoplay"
+              allowfullscreen
+            ></iframe>
+          )}
+        </div>
+        <figcaption class="mt-2 text-center text-xs text-ink/60">
+          Film: droga do pracowni Tortollandia
+        </figcaption>
+      </figure>
+    )}
+
+    <section class="mt-8 w-full rounded-2xl border border-wrzos/15 bg-white/80 p-5 backdrop-blur">
+      <h2 class="text-lg font-semibold text-wrzos-700">Adres pracowni</h2>
+      <address class="mt-1 not-italic text-sm text-ink/80">
+        {site.name}<br />
+        {site.address.street}<br />
+        {site.address.postalCode} {site.city}
+      </address>
+    </section>
+
+    <div class="mt-4 flex flex-col gap-3">
+      <a
+        id="dojazd-mapa"
+        href={site.links.googleMaps}
+        target="_blank"
+        rel="noopener"
+        class="hub-btn hub-btn--primary"
+        aria-label="Otwórz nawigację do Tortollandii w Mapach Google"
+      >
+        <span class="hub-icon"><Icon name="map" /></span>
+        <span>Otwórz w Mapach Google</span>
+      </a>
+      <a href={`tel:${site.phoneE164}`} class="hub-btn" aria-label="Zadzwoń do Tortollandii">
+        <span class="hub-icon"><Icon name="phone" /></span>
+        <span>Zadzwoń · {site.phoneDisplay}</span>
+      </a>
+    </div>
+
+    <footer class="mt-auto pt-10 text-center text-xs text-ink/55">
+      <p>© {new Date().getFullYear()} {site.name} · {site.owner} · {site.city}</p>
+    </footer>
+  </main>
+
+  {site.ga4Id && (
+    <script is:inline>
+      // GA4 tracking for the directions page. Rebinds on every Astro view-transition
+      // load; guards each element so events aren't double-bound.
+      (function () {
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        function wire() {
+          if (!document.getElementById('dojazd-mapa') && !document.querySelector('#dojazd-video')) return;
+          if (window.location.pathname.replace(/\/$/, '') !== '/dojazd') return;
+          // Page visit (visible in Realtime + Zdarzenia, like ulotki_qr_scan).
+          if (!window.__ttDojazdView) {
+            window.__ttDojazdView = true;
+            gtag('event', 'dojazd_view', {
+              event_category: 'dojazd',
+              page_location: window.location.href,
+            });
+          }
+          var mapa = document.getElementById('dojazd-mapa');
+          if (mapa && !mapa.dataset.gaWired) {
+            mapa.dataset.gaWired = '1';
+            mapa.addEventListener('click', function () {
+              gtag('event', 'dojazd_mapa_klik', {
+                event_category: 'dojazd',
+                link_url: mapa.getAttribute('href'),
+                transport_type: 'beacon',
+              });
+            });
+          }
+          var vid = document.querySelector('#dojazd-video video');
+          if (vid && !vid.dataset.gaWired) {
+            vid.dataset.gaWired = '1';
+            vid.addEventListener('play', function () {
+              gtag('event', 'dojazd_film_play', { event_category: 'dojazd' });
+            }, { once: true });
+          }
+        }
+        document.addEventListener('astro:page-load', wire);
+        wire();
+      })();
+    </script>
+  )}
+</BaseLayout>
