@@ -13,7 +13,17 @@ export default defineConfig({
   vite: { plugins: [tailwindcss()] },
   integrations: [
     sitemap(),
-    compress({ CSS: true, HTML: true, JavaScript: true, Image: false, SVG: true }),
+    // HTML: keep attribute quotes. html-minifier-terser defaults to
+    // removeAttributeQuotes:true, which turns `content="https://…/owner.jpg"` into
+    // `content=https://…/owner.jpg`. WhatsApp (and some other social scrapers) then
+    // refuse to read the unquoted og:image and drop the link preview thumbnail.
+    compress({
+      CSS: true,
+      HTML: { 'html-minifier-terser': { removeAttributeQuotes: false } },
+      JavaScript: true,
+      Image: false,
+      SVG: true,
+    }),
   ],
   experimental: {
     fonts: [

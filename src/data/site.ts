@@ -5,8 +5,10 @@ export const site = {
   city: 'Ełk',
   url: 'https://tortollandia.pl',
   tagline: 'Torty artystyczne na każdą okazję',
+  // Meta description — kept under ~160 chars so Google and social previews don't
+  // truncate it. Occasion keywords (urodziny/chrzciny/komunie/wesela) retained for SEO.
   description:
-    'Tortollandia — pracownia tortów artystycznych z Ełku. Torty na urodziny, chrzciny, komunie, wesela i każdą wyjątkową okazję. Zadzwoń, napisz lub odwiedź nas w mediach społecznościowych.',
+    'Tortollandia — pracownia tortów artystycznych z Ełku. Torty na urodziny, chrzciny, komunie, wesela i każdą okazję. Zadzwoń lub napisz do nas.',
   phoneDisplay: '728 950 291',
   phoneE164: '+48728950291',
   email: 'tortollandiaelk@gmail.com',
