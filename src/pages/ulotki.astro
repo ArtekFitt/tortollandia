@@ -25,9 +25,16 @@ import { site } from '../data/site';
       (function () {
         window.dataLayer = window.dataLayer || [];
         function gtag() { dataLayer.push(arguments); }
+        // Read the campaign tag off the QR's UTM (?utm_campaign=...) so the scan
+        // event carries a "kampania" parameter. V1 flyers (old QR, no UTM) fire
+        // with kampania="brak"; V2 flyers (new QR) fire with "ulotki_v2" — so the
+        // two flyer batches are distinguishable in the event report. (LOCA-354)
+        var params = new URLSearchParams(window.location.search);
+        var kampania = params.get('utm_campaign') || 'brak';
         gtag('event', 'ulotki_qr_scan', {
           event_category: 'qr',
           event_label: 'ulotki_miasto',
+          kampania: kampania,
           page_location: window.location.href,
         });
       })();
