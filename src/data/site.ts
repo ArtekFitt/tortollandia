@@ -42,13 +42,14 @@ export const site = {
   // no third-party chrome) → `youtubeId` (unlisted) → `driveId` (Google Drive
   // /preview iframe, requires the file be shared "anyone with the link"). Leave all
   // empty to hide the player and show the map/contact only.
-  // Kept OFF until the owner picks a hosting method (the source file is currently
-  // private in Drive). Pending Drive file id: 1GneGP1_KAcNDu5D6W8v_1VTPyOd7qki8 —
-  // set `driveId` to it once the file is shared "anyone with the link", or set
-  // `youtubeId` if uploaded as an unlisted YouTube video, or `file` if self-hosted.
+  // Self-hosted: compressed from the owner's 1080x1920 source (40.5s) with ffmpeg
+  // to 720x1280 / 30 fps / ~1.4 Mbps (45 MB → ~7 MB) + faststart for progressive
+  // streaming. Poster is a frame grab so the player shows a preview before load.
+  // Alternate hosting (unlisted YouTube / Drive /preview) is still supported if the
+  // owner prefers to move it later — set `youtubeId` or `driveId` and clear `file`.
   dojazdVideo: {
-    file: '',
-    poster: '',
+    file: '/dojazd/jak-dojechac.mp4',
+    poster: '/dojazd/jak-dojechac-poster.jpg',
     youtubeId: '',
     driveId: '',
   },
