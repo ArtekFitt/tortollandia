@@ -72,12 +72,12 @@ const videoJsonLd =
       <figure class="mt-6 w-full">
         <div
           id="dojazd-video"
-          class="mx-auto w-full max-w-sm overflow-hidden rounded-2xl bg-black shadow-[0_10px_30px_rgba(116,64,111,0.22)]"
-          style="aspect-ratio:9/16;max-height:75vh"
+          class="mx-auto overflow-hidden rounded-2xl bg-lila-50 shadow-[0_10px_30px_rgba(116,64,111,0.22)]"
+          style="aspect-ratio:9/16;width:min(100%,24rem,calc(75vh * 9 / 16))"
         >
           {videoKind === 'file' && (
             <video
-              class="h-full w-full object-contain"
+              class="block h-full w-full object-cover"
               controls
               preload="none"
               playsinline
