@@ -38,19 +38,19 @@ export const site = {
   },
 
   // "Jak dojechać" (/dojazd) — the owner's short film showing how to reach the
-  // studio. Resolution order: self-hosted `file` (preferred: native player, fast,
-  // no third-party chrome) → `youtubeId` (unlisted) → `driveId` (Google Drive
-  // /preview iframe, requires the file be shared "anyone with the link"). Leave all
-  // empty to hide the player and show the map/contact only.
-  // Kept OFF until the owner picks a hosting method (the source file is currently
-  // private in Drive). Pending Drive file id: 1GneGP1_KAcNDu5D6W8v_1VTPyOd7qki8 —
-  // set `driveId` to it once the file is shared "anyone with the link", or set
-  // `youtubeId` if uploaded as an unlisted YouTube video, or `file` if self-hosted.
+  // studio. Self-hosted in public/dojazd (720x1280, ~10 MB, H.264): the page uses
+  // preload="none" + a poster, so the file is only downloaded when someone presses
+  // play. `youtubeId` / `driveId` remain as alternative sources if hosting changes.
   dojazdVideo: {
-    file: '',
-    poster: '',
+    file: '/dojazd/jak-dojechac.mp4',
+    poster: '/dojazd/jak-dojechac-poster.jpg',
     youtubeId: '',
     driveId: '',
+    width: 720,
+    height: 1280,
+    // ISO-8601 duration + upload date for the schema.org VideoObject on /dojazd.
+    duration: 'PT41S',
+    uploadDate: '2026-09-27',
   },
 
   // Contact form — Web3Forms (static-friendly, free). Delivers to the email above.
