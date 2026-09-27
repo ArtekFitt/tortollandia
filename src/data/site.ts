@@ -13,11 +13,44 @@ export const site = {
   phoneE164: '+48728950291',
   email: 'tortollandiaelk@gmail.com',
 
+  // Physical address of the studio (source: Google Business Profile / Maps place,
+  // resolved from the map short-link). Used for the LocalBusiness/Bakery schema.
+  address: {
+    street: 'Generała Fieldorfa „Nila” 6',
+    postalCode: '19-300',
+    region: 'warmińsko-mazurskie',
+  },
+  // Geo coordinates of the address (geocoded, matches the Google Maps place pin).
+  geo: { lat: 53.8412614, lng: 22.3592268 },
+
+  // Opening hours for schema.org openingHoursSpecification. Tortollandia is a
+  // by-order studio (no walk-in retail counter), so hours are left empty until the
+  // owner confirms exact visiting hours — an empty array omits the field entirely
+  // rather than publishing guessed hours. Format: { days:['Monday',…], opens:'09:00', closes:'17:00' }.
+  openingHours: [] as { days: string[]; opens: string; closes: string }[],
+
   links: {
     facebook: 'https://www.facebook.com/Tortollandia',
     instagram: 'https://www.instagram.com/tortollandia_elk',
     googleReview: 'https://g.page/r/CROU7uTuqp8GEBI/review',
+    googleMaps: 'https://maps.app.goo.gl/84samJv4SSBEMwDa7',
     whatsapp: 'https://wa.me/48728950291',
+  },
+
+  // "Jak dojechać" (/dojazd) — the owner's short film showing how to reach the
+  // studio. Self-hosted in public/dojazd (720x1280, ~10 MB, H.264): the page uses
+  // preload="none" + a poster, so the file is only downloaded when someone presses
+  // play. `youtubeId` / `driveId` remain as alternative sources if hosting changes.
+  dojazdVideo: {
+    file: '/dojazd/jak-dojechac.mp4',
+    poster: '/dojazd/jak-dojechac-poster.jpg',
+    youtubeId: '',
+    driveId: '',
+    width: 720,
+    height: 1280,
+    // ISO-8601 duration + upload date for the schema.org VideoObject on /dojazd.
+    duration: 'PT41S',
+    uploadDate: '2026-09-27',
   },
 
   // Contact form — Web3Forms (static-friendly, free). Delivers to the email above.
